@@ -1,6 +1,7 @@
 import { DashboardMockup } from "@/components/dashboard-mockup";
 import { FeaturesSection } from "@/components/features-section";
 import { WaitlistForm } from "@/components/waitlist-form";
+import { Logo } from "@/components/logo";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 
 export default function Home() {
@@ -11,8 +12,8 @@ export default function Home() {
       <header className="sticky top-0 z-50 w-full border-b border-[var(--line)] bg-[var(--background)]/80 backdrop-blur-xl transition-all">
         <div className="mx-auto flex max-w-screen-2xl items-center justify-between px-6 py-4 lg:px-12">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--foreground)]">
-              <div className="h-3 w-3 rounded-[3px] bg-[var(--background)]" />
+            <div className="flex h-10 w-10 items-center justify-center">
+              <Logo className="h-8 w-8 text-[var(--foreground)]" />
             </div>
             <p className="font-heading text-lg font-bold tracking-tight">MorningHQ</p>
           </div>
@@ -135,7 +136,7 @@ export default function Home() {
       <section id="waitlist" className="w-full bg-[var(--surface-strong)] py-24 sm:py-32">
         <div className="mx-auto max-w-3xl px-6 text-center lg:px-12">
           <h2 className="text-4xl font-semibold tracking-tight text-[var(--foreground)] sm:text-6xl">
-            Start the day with <span className="editorial-accent aurora-text">clarity</span>.
+            Start the day with <span className="editorial-accent aurora-text">clarity.</span>
           </h2>
           <p className="mx-auto mt-6 text-lg text-[var(--muted)] sm:text-xl">
             Join the waitlist for early access. Built for teams who spend too
@@ -151,7 +152,7 @@ export default function Home() {
       <footer className="w-full border-t border-[var(--line)] bg-[var(--background)] px-6 py-12 lg:px-12">
         <div className="mx-auto flex max-w-screen-2xl flex-col items-center justify-between gap-6 sm:flex-row">
           <div className="flex items-center gap-3">
-            <div className="h-6 w-6 rounded-md bg-[var(--foreground)]" />
+            <Logo className="h-6 w-6 text-[var(--foreground)]" />
             <p className="font-heading font-semibold text-[var(--foreground)]">MorningHQ</p>
           </div>
           <div className="flex gap-6 text-sm text-[var(--muted)]">
