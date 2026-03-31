@@ -73,17 +73,17 @@ export default function Home() {
       </div>
 
       {/* Deep Work Section */}
-      <section id="workflow" className="w-full bg-[var(--sky-indigo)] text-[var(--surface)]">
+      <section id="workflow" className="w-full bg-slate-950 text-[var(--surface)]">
         <div className="mx-auto w-full max-w-screen-2xl px-6 py-24 sm:py-32 lg:px-12">
           <div className="grid gap-16 lg:grid-cols-2 lg:items-center">
             <div>
-              <div className="mb-6 inline-flex items-center rounded-full border border-[var(--sky-violet)] bg-[var(--sky-violet)] px-4 py-1.5 text-xs font-medium uppercase tracking-widest text-[var(--highlight)]">
+              <div className="mb-6 inline-flex items-center rounded-full border border-slate-800 bg-slate-800/50 px-4 py-1.5 text-xs font-medium uppercase tracking-widest text-[var(--highlight)]">
                 Protected Focus
               </div>
               <h2 className="text-4xl font-semibold tracking-tight sm:text-6xl text-[var(--surface)]">
                  Deep work, <br/> without disappearing.
               </h2>
-              <p className="mt-6 max-w-xl text-lg leading-relaxed text-[#c6b6d6] sm:text-xl">
+              <p className="mt-6 max-w-xl text-lg leading-relaxed text-slate-300 sm:text-xl">
                 MorningHQ prepares replies, meeting context, and follow-up drafts before you focus. 
                 The result is a work session with fewer interruptions and less fear that something critical is going stale.
               </p>
@@ -98,13 +98,13 @@ export default function Home() {
                     <div className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[var(--accent)] text-[var(--surface)]">
                       <CheckCircle2 className="h-4 w-4" />
                     </div>
-                    <p className="text-base text-[#c6b6d6]">{item}</p>
+                    <p className="text-base text-slate-300">{item}</p>
                   </div>
                 ))}
               </div>
             </div>
             
-            <div className="overflow-hidden rounded-[2rem] border border-[var(--sky-violet)] bg-[#241b3d] p-8 lg:p-12 shadow-2xl">
+            <div className="overflow-hidden rounded-[2rem] border border-slate-800 bg-slate-900 p-8 lg:p-12 shadow-2xl">
               <p className="font-heading text-xl font-semibold text-[var(--surface)]">Focus session active</p>
               <p className="mt-1 text-sm text-[var(--surface-strong)]/60">08:30 to 10:00</p>
               
@@ -119,9 +119,9 @@ export default function Home() {
                 </div>
               </div>
               
-              <div className="mt-10 border-t border-[var(--sky-violet)] pt-8 space-y-5">
+              <div className="mt-10 border-t border-slate-800 pt-8 space-y-5">
                 <p className="text-xs font-semibold uppercase tracking-widest text-[var(--surface-strong)]/60">Focus Sequence</p>
-                <div className="text-base text-[#c6b6d6] space-y-4">
+                <div className="text-base text-slate-300 space-y-4">
                   <div className="flex gap-4"><span className="text-[var(--highlight)] font-semibold">01</span><p>Renewal sync brief assembled.</p></div>
                   <div className="flex gap-4"><span className="text-[var(--highlight)] font-semibold">02</span><p>Engineering responses drafted.</p></div>
                   <div className="flex gap-4"><span className="text-[var(--highlight)] font-semibold">03</span><p>Status review reserved for 10:05.</p></div>
