@@ -1,25 +1,22 @@
 "use client";
 
+import { submitWaitlistSignup, type WaitlistActionState } from "@/app/actions/waitlist";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, CheckCircle2, ShieldCheck } from "lucide-react";
-import { useState } from "react";
+import { useActionState } from "react";
+import { useFormStatus } from "react-dom";
+
+const initialWaitlistState: WaitlistActionState = {
+  status: "idle",
+};
 
 export function WaitlistForm() {
-  const [status, setStatus] = useState<"idle" | "submitting" | "success">("idle");
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setStatus("submitting");
-
-    window.setTimeout(() => {
-      setStatus("success");
-    }, 1200);
-  };
+  const [state, formAction] = useActionState(submitWaitlistSignup, initialWaitlistState);
 
   return (
     <div className="mx-auto w-full max-w-3xl">
       <AnimatePresence mode="wait">
-        {status === "success" ? (
+        {state.status === "success" ? (
           <motion.div
             key="success"
             initial={{ opacity: 0, y: 18, scale: 0.98 }}
@@ -34,7 +31,7 @@ export function WaitlistForm() {
               You&apos;re on the list.
             </h3>
             <p className="mx-auto mt-3 max-w-md text-sm leading-7 text-[var(--muted)] sm:text-base">
-              We&apos;ll reach out with early access details as the first cohort opens.
+              {state.message ?? "We&apos;ll reach out with early access details as the first cohort opens."}
             </p>
           </motion.div>
         ) : (
@@ -43,51 +40,84 @@ export function WaitlistForm() {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -18 }}
-            onSubmit={handleSubmit}
+            action={formAction}
             className="text-left"
           >
+            {state.message ? (
+              <p className="mb-6 rounded-2xl border border-[#f3c9b6] bg-[#fff4ed] px-4 py-3 text-sm text-[var(--accent-ink)]">
+                {state.message}
+              </p>
+            ) : null}
+
             <div className="grid gap-6 sm:grid-cols-2">
-              <label className="space-y-1 block">
-                <span className="text-[0.65rem] font-semibold uppercase tracking-widest text-[var(--muted)]">Full name</span>
+              <label className="block space-y-1">
+                <span className="text-[0.65rem] font-semibold uppercase tracking-widest text-[var(--muted)]">
+                  Full name
+                </span>
                 <input
                   type="text"
-                  id="name"
-                  name="name"
+                  id="fullName"
+                  name="fullName"
                   required
                   placeholder="Alex Morgan"
+                  aria-invalid={Boolean(state.fieldErrors?.fullName)}
                   className="w-full border-0 border-b border-[var(--line-strong)] bg-transparent px-0 py-3 text-base text-[var(--foreground)] outline-none placeholder:text-[var(--muted)]/50 focus:border-[var(--accent)] transition-colors"
                 />
+                {state.fieldErrors?.fullName ? (
+                  <p className="text-sm text-[#b84e1e]">{state.fieldErrors.fullName[0]}</p>
+                ) : null}
               </label>
-              <label className="space-y-1 block">
-                <span className="text-[0.65rem] font-semibold uppercase tracking-widest text-[var(--muted)]">Work email</span>
+
+              <label className="block space-y-1">
+                <span className="text-[0.65rem] font-semibold uppercase tracking-widest text-[var(--muted)]">
+                  Work email
+                </span>
                 <input
                   type="email"
                   id="email"
                   name="email"
                   required
                   placeholder="alex@company.com"
+                  aria-invalid={Boolean(state.fieldErrors?.email)}
                   className="w-full border-0 border-b border-[var(--line-strong)] bg-transparent px-0 py-3 text-base text-[var(--foreground)] outline-none placeholder:text-[var(--muted)]/50 focus:border-[var(--accent)] transition-colors"
                 />
+                {state.fieldErrors?.email ? (
+                  <p className="text-sm text-[#b84e1e]">{state.fieldErrors.email[0]}</p>
+                ) : null}
               </label>
-              <label className="space-y-1 block">
-                <span className="text-[0.65rem] font-semibold uppercase tracking-widest text-[var(--muted)]">Company</span>
+
+              <label className="block space-y-1">
+                <span className="text-[0.65rem] font-semibold uppercase tracking-widest text-[var(--muted)]">
+                  Company
+                </span>
                 <input
                   type="text"
                   id="company"
                   name="company"
                   placeholder="Acme"
+                  aria-invalid={Boolean(state.fieldErrors?.company)}
                   className="w-full border-0 border-b border-[var(--line-strong)] bg-transparent px-0 py-3 text-base text-[var(--foreground)] outline-none placeholder:text-[var(--muted)]/50 focus:border-[var(--accent)] transition-colors"
                 />
+                {state.fieldErrors?.company ? (
+                  <p className="text-sm text-[#b84e1e]">{state.fieldErrors.company[0]}</p>
+                ) : null}
               </label>
-              <label className="space-y-1 block">
-                <span className="text-[0.65rem] font-semibold uppercase tracking-widest text-[var(--muted)]">Role</span>
+
+              <label className="block space-y-1">
+                <span className="text-[0.65rem] font-semibold uppercase tracking-widest text-[var(--muted)]">
+                  Role
+                </span>
                 <input
                   type="text"
                   id="role"
                   name="role"
                   placeholder="Head of Product"
+                  aria-invalid={Boolean(state.fieldErrors?.role)}
                   className="w-full border-0 border-b border-[var(--line-strong)] bg-transparent px-0 py-3 text-base text-[var(--foreground)] outline-none placeholder:text-[var(--muted)]/50 focus:border-[var(--accent)] transition-colors"
                 />
+                {state.fieldErrors?.role ? (
+                  <p className="text-sm text-[#b84e1e]">{state.fieldErrors.role[0]}</p>
+                ) : null}
               </label>
             </div>
 
@@ -101,24 +131,32 @@ export function WaitlistForm() {
                 </p>
               </div>
 
-              <button
-                type="submit"
-                disabled={status === "submitting"}
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-[var(--foreground)] px-8 py-4 text-sm font-semibold text-[var(--background)] transition-transform hover:scale-105 disabled:cursor-not-allowed disabled:opacity-70"
-              >
-                {status === "submitting" ? (
-                  "Joining..."
-                ) : (
-                  <>
-                    Join the waitlist
-                    <ArrowRight className="h-4 w-4" />
-                  </>
-                )}
-              </button>
+              <SubmitButton />
             </div>
           </motion.form>
         )}
       </AnimatePresence>
     </div>
+  );
+}
+
+function SubmitButton() {
+  const { pending } = useFormStatus();
+
+  return (
+    <button
+      type="submit"
+      disabled={pending}
+      className="inline-flex items-center justify-center gap-2 rounded-full bg-[var(--foreground)] px-8 py-4 text-sm font-semibold text-[var(--background)] transition-transform hover:scale-105 disabled:cursor-not-allowed disabled:opacity-70"
+    >
+      {pending ? (
+        "Joining..."
+      ) : (
+        <>
+          Join the waitlist
+          <ArrowRight className="h-4 w-4" />
+        </>
+      )}
+    </button>
   );
 }

@@ -57,7 +57,7 @@ export function DashboardMockup() {
               Review renewal risks before the 10:00 sync.
             </h3>
             <p className="mt-4 text-[var(--muted)] max-w-2xl leading-relaxed">
-              Customer sentiment dipped after yesterday's blocker call. A follow-up draft is ready, and the
+              Customer sentiment dipped after yesterday&apos;s blocker call. A follow-up draft is ready, and the
               latest engineering notes are attached so you can lead with clarity.
             </p>
             
