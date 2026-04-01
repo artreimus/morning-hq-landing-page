@@ -2,8 +2,7 @@
 
 import { headers } from "next/headers";
 
-import { getDb } from "@/db/client";
-import { waitlistSignups } from "@/db/schema";
+import { supabase } from "@/lib/supabase";
 import { waitlistSignupSchema } from "@/lib/waitlist-schema";
 
 export type WaitlistFieldName = "fullName" | "email" | "company" | "role";
@@ -19,9 +18,8 @@ function getFieldValue(formData: FormData, key: WaitlistFieldName) {
   return typeof value === "string" ? value : "";
 }
 
-function isDatabaseError(error: unknown): error is Error & { code?: string } {
-  return error instanceof Error;
-}
+// PostgreSQL unique-violation error code surfaced by PostgREST / Supabase
+const UNIQUE_VIOLATION_CODE = "23505";
 
 export async function submitWaitlistSignup(
   _previousState: WaitlistActionState,
@@ -42,27 +40,22 @@ export async function submitWaitlistSignup(
     };
   }
 
-  try {
-    const requestHeaders = await headers();
+  const requestHeaders = await headers();
 
-    await getDb().insert(waitlistSignups).values({
-      email: parsedValues.data.email,
-      fullName: parsedValues.data.fullName,
-      company: parsedValues.data.company ?? null,
-      role: parsedValues.data.role ?? null,
-      source: "landing-page",
-      metadata: {
-        referrer: requestHeaders.get("referer") ?? "",
-        userAgent: requestHeaders.get("user-agent") ?? "",
-      },
-    });
+  const { error } = await supabase.from("waitlist_signups").insert({
+    email: parsedValues.data.email,
+    full_name: parsedValues.data.fullName,
+    company: parsedValues.data.company ?? null,
+    role: parsedValues.data.role ?? null,
+    source: "landing-page",
+    metadata: {
+      referrer: requestHeaders.get("referer") ?? "",
+      userAgent: requestHeaders.get("user-agent") ?? "",
+    },
+  });
 
-    return {
-      status: "success",
-      message: "We'll reach out with early access details as the first cohort opens.",
-    };
-  } catch (error) {
-    if (isDatabaseError(error) && error.code === "23505") {
+  if (error) {
+    if (error.code === UNIQUE_VIOLATION_CODE) {
       return {
         status: "success",
         message: "That email is already on the list. We'll still reach out when access opens.",
@@ -76,4 +69,10 @@ export async function submitWaitlistSignup(
       message: "We couldn't save your signup just now. Please try again in a moment.",
     };
   }
+
+  return {
+    status: "success",
+    message: "We'll reach out with early access details as the first cohort opens.",
+  };
 }
+
